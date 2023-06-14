@@ -1,13 +1,9 @@
-// More API functions here:
-// https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
-
-// the link to your model provided by Teachable Machine export panel
 const URL = './my_model/';
 
 let model, webcam, labelContainer, maxPredictions;
 
 // Load the image model and setup the webcam
-async function init() {
+async function initCam() {
     const modelURL = URL + 'model.json';
     const metadataURL = URL + 'metadata.json';
 
@@ -19,53 +15,60 @@ async function init() {
     maxPredictions = model.getTotalClasses();
 
     // Convenience function to setup a webcam
-    const flip = true; // whether to flip the webcam
-    webcam = new tmImage.Webcam(40, 40, flip); // width, height, flip
-    await webcam.setup(); // request access to the webcam
-    await webcam.play();
+    const flip = true; // 좌우반전
+    webcam = new tmImage.Webcam(490, 230, flip); // width, height, 좌우반전
+    await webcam.setup();   // 웹캠 사용권한 요청
+    await webcam.play();    // 웹캠 재생
     window.requestAnimationFrame(loop);
 
     // append elements to the DOM
     document.getElementById('webcam-container').appendChild(webcam.canvas);
-    labelContainer = document.getElementById('label-container');
+    labelContainer = document.getElementById('camLabel-container');
     for (let i = 0; i < maxPredictions; i++) {
         // and class labels
         labelContainer.appendChild(document.createElement('div'));
-        stop.init()
+        return
     }
 }
 
 async function loop() {
     webcam.update(); // update the webcam frame
-    await predict();
+    await camPredict();
     window.requestAnimationFrame(loop);
 }
 
 // run the webcam image through the image model
-async function predict() {
-    // predict can take in an image, video, or canvas HTML element
+async function camPredict() {
     const prediction = await model.predict(webcam.canvas);
-    let predictionsList = []; // 리스트 초기화
-
+    // 가장 높은 확률 값을 가진 클래스 레이블 찾기
+    let highestProbability = 0;
+    let highestLabel = '';
     for (let i = 0; i < maxPredictions; i++) {
-        const classPrediction =
-            prediction[i].className + ': ' + prediction[i].probability.toFixed(2);
-        predictionsList.push(classPrediction); // 리스트에 항목 추가
+        if (prediction[i].probability > highestProbability) {
+            highestProbability = prediction[i].probability;
+            highestLabel = prediction[i].className;
+        }
+    }
+    // 가장 높은 확률 값을 가진 클래스 레이블을 표시
+    const labelElement = document.createElement('div');
+    labelElement.textContent = highestLabel + ': ' + highestProbability.toFixed(4) * 100 + '%';
+    // 기존의 모든 요소 제거
+    while (labelContainer.firstChild) {
+        labelContainer.firstChild.remove();
     }
 
-    // 최대 확률 값 및 해당 클래스 예측 결과 출력
-    const maxProbabilityIndex = prediction.findIndex(
-        (p) => p.probability === Math.max(...prediction.map((p) => p.probability))
-    );
-    const maxProbabilityPrediction = predictionsList[maxProbabilityIndex];
-    labelContainer.childNodes[maxProbabilityIndex].innerHTML = maxProbabilityPrediction;
+    // 가장 높은 확률 값을 가진 클래스 레이블을 추가
+    labelContainer.appendChild(labelElement);
+
+    //3초(3000ms) 대기
+    await delay(3000);
+    // 3초(3000ms) 대기 함수
+    function delay(ms) {
+        return new Promise(function (resolve) {
+            setTimeout(resolve, ms);
+        });
+    }
+
+    //예측 함수 실행
+    camPredict();
 }
-            // async function predict() {
-            //     // predict can take in an image, video or canvas html element
-            //     const prediction = await model.predict(webcam.canvas);
-            //     for (let i = 0; i < maxPredictions; i++) {
-            //         const classPrediction =
-            //             prediction[i].className + ': ' + prediction[i].probability.toFixed(2);
-            //         labelContainer.childNodes[i].innerHTML = classPrediction;
-            //     }
-            // }

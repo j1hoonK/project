@@ -1,5 +1,6 @@
 function readURL(input) {
     if (input.files && input.files[0]) {
+
         var reader = new FileReader();
 
         reader.onload = function (e) {
@@ -12,6 +13,7 @@ function readURL(input) {
         };
 
         reader.readAsDataURL(input.files[0]);
+
     } else {
         removeUpload();
     }
@@ -28,6 +30,7 @@ $('.image-upload-wrap').bind('dragover', function () {
 $('.image-upload-wrap').bind('dragleave', function () {
     $('.image-upload-wrap').removeClass('image-dropping');
 });
+
 
 // More API functions here:
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
