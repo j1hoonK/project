@@ -1,39 +1,74 @@
+// 이미지 모델 불러오기
 const URL = './my_model/';
+const modelURL = URL + 'model.json';
+const metadataURL = URL + 'metadata.json';
+
+const changDelay = document.getElementById("onOff");
+changDelay.addEventListener("click", function () {
+    const is_checked = changDelay.checked;
+    if (is_checked) {
+        webcam.stop();
+    } else {
+        initCam();
+    }
+})
+
+// 페이지 진입 시, WebCam 자동실행
+initCam();
 
 let model, webcam, labelContainer, maxPredictions;
+// WebCam 설정
 
-// Load the image model and setup the webcam
+
 async function initCam() {
-    const modelURL = URL + 'model.json';
-    const metadataURL = URL + 'metadata.json';
+    if (document.getElementById('webcam-container').hasChildNodes()) {          // WebCam canvas 존재 확인
+        const camArea = document.getElementById("webcam-container");
+        camArea.replaceChildren();                                              // canvas 삭제
 
-    // load the model and metadata
-    // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-    // or files from your local hard drive
-    // Note: the pose library adds "tmImage" object to your window (window.tmImage)
-    model = await tmImage.load(modelURL, metadataURL);
-    maxPredictions = model.getTotalClasses();
+        model = await tmImage.load(modelURL, metadataURL);  // model, metadata 로딩
+        maxPredictions = model.getTotalClasses();           // 클래스의 총 개수 확인
 
-    // Convenience function to setup a webcam
-    const flip = true; // 좌우반전
-    webcam = new tmImage.Webcam(490, 230, flip); // width, height, 좌우반전
-    await webcam.setup();   // 웹캠 사용권한 요청
-    await webcam.play();    // 웹캠 재생
-    window.requestAnimationFrame(loop);
+        // WebCam 세팅
+        const flip = true;                                  // 좌우반전
+        webcam = new tmImage.Webcam(490, 230, flip);        // width, height, 좌우반전
+        await webcam.setup();                                     // 웹캠 사용권한 요청
+        await webcam.play();                                // 웹캠 재생
+        window.requestAnimationFrame(loop);
+        
+        // 화면 Display 설정
+        document.getElementById('webcam-container').appendChild(webcam.canvas);     // Display될 위치 지정
+        labelContainer = document.getElementById('camLabel-container');             // 클래스 레이블 표시용
+        for (let i = 0; i < maxPredictions; i++) {                                  // 전체 클래스 정보를 labelContainer 에 저장
+            // and class labels
+            labelContainer.appendChild(document.createElement('div'));              // 클래스 레이블 표시위치
+            return
+        }
+    } else {
+        model = await tmImage.load(modelURL, metadataURL);  // model, metadata 로딩
+        maxPredictions = model.getTotalClasses();           // 클래스의 총 개수 확인
 
-    // append elements to the DOM
-    document.getElementById('webcam-container').appendChild(webcam.canvas);
-    labelContainer = document.getElementById('camLabel-container');
-    for (let i = 0; i < maxPredictions; i++) {
-        // and class labels
-        labelContainer.appendChild(document.createElement('div'));
-        return
+        // WebCam 세팅
+        const flip = true;                                  // 좌우반전
+        webcam = new tmImage.Webcam(490, 230, flip);        // width, height, 좌우반전
+        await webcam.setup();                               // 웹캠 사용권한 요청
+        await webcam.play();                                // 웹캠 재생
+        window.requestAnimationFrame(loop);
+
+        // 화면 Display 설정
+        document.getElementById('webcam-container').appendChild(webcam.canvas);     // Display될 위치 지정
+        labelContainer = document.getElementById('camLabel-container');             // 클래스 레이블 표시용
+        for (let i = 0; i < maxPredictions; i++) {                                  // 전체 클래스 정보를 labelContainer 에 저장
+            // and class labels
+            labelContainer.appendChild(document.createElement('div'));              // 클래스 레이블 표시위치
+            return
+        }
     }
 }
 
+
 async function loop() {
-    webcam.update(); // update the webcam frame
-    await camPredict();
+    webcam.update();                                // 웹캠 화면 업데이트
+    await camPredict();                             // 예측 진행
     window.requestAnimationFrame(loop);
 }
 
@@ -51,7 +86,7 @@ async function camPredict() {
     }
     // 가장 높은 확률 값을 가진 클래스 레이블을 표시
     const labelElement = document.createElement('div');
-    labelElement.textContent = highestLabel + ': ' + highestProbability.toFixed(4) * 100 + '%';
+    labelElement.textContent = highestLabel + ': ' + highestProbability.toFixed(4) * 100 + '% 입니다.';
     // 기존의 모든 요소 제거
     while (labelContainer.firstChild) {
         labelContainer.firstChild.remove();
@@ -59,8 +94,7 @@ async function camPredict() {
 
     // 가장 높은 확률 값을 가진 클래스 레이블을 추가
     labelContainer.appendChild(labelElement);
-
-    //3초(3000ms) 대기
+    // 3초 대기
     await delay(3000);
     // 3초(3000ms) 대기 함수
     function delay(ms) {
@@ -68,7 +102,8 @@ async function camPredict() {
             setTimeout(resolve, ms);
         });
     }
-
-    //예측 함수 실행
     camPredict();
+
 }
+
+

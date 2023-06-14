@@ -20,9 +20,10 @@
             </div>
         </section>
     </div>
-    <div class="wCam" id="webcam-container"><h3></h3>
-        </div>
-    <label id="wCamBtn" for="cBtn"><input type="button" id="cBtn" onclick="initCam()" value="캠버튼!"></label>
+    <div class="wCam" id="webcam-container"></div>
+    <div id="wCamBtn">WebCam
+            <input type="checkbox" id="onOff"><label for="onOff" id="ply"></label>
+    </div>
     <div class="wCamRst" id="camLabel-container"><p id="camPredict">webCamPredictResult</p></div>
     <button id="addImgH", class="file-upload-btn", onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
     <div id="addImg">
@@ -36,7 +37,7 @@
                 />
                 <div class="drag-text">
                     <h3>Drag and drop a file or select add Image</h3>
-                </div>
+                </div> 
             </div>
             <div class="file-upload-content">
                 <img class="file-upload-image" id="money-image" src="#" alt="your image" />
