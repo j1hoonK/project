@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         request.send();
     }
     // 페이지 로드 시, 자동 호출
-sendAPIRequest();
+    // sendAPIRequest();
 
     // 환율 정보 표시 함수
     function displayExchangeInfo(data) {
@@ -54,6 +54,8 @@ sendAPIRequest();
             console.log('해당 화폐 단위의 환율 정보를 찾을 수 없습니다.');
         } else {
             var exchangedAmount = amount * exchangeRate;
+            //const labelElementtt = document.createElement('div');
+            //labelElementtt.textContent = amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + ' KRW입니다.';
             console.log(amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + ' KRW입니다.');
         }
     }

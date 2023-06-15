@@ -4,8 +4,8 @@
     font-size: x-large;
     text-align: center;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(12, 70px);
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(14, 70px);
     gap: 10px;
     padding: 10px;
 }
@@ -14,7 +14,7 @@
     margin: auto;
     display: flex;
     align-items: center;
-    grid-column: 1/7;
+    grid-column: 1/9;
     grid-row: 1/2;
     background-color: #ffffff;
 
@@ -26,16 +26,19 @@
     border: none;
     border-radius: 4px;
     border-bottom: 4px solid #157582;
-    grid-column: 2/4;
+    grid-column: 2/5;
     text-transform: uppercase;
     font-weight: 700;
     font-size: xx-large;
-    display: flex;
+    position: relative;
+    /* display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
 }
 #wCamH h3{
-    transform: translate(50%,0);
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, -52%);
 }
 
 .wCam {
@@ -46,7 +49,7 @@
     align-items: center;
     font-weight: 700;
     font-size: xx-large;
-    grid-column: 2/4;
+    grid-column: 2/5;
     grid-row: 3/6;
     background-color: #000000;
 }
@@ -57,19 +60,18 @@ canvas{
 }
 
 #wCamBtn {
-    grid-column: 2;
+    grid-column: 2/3;
     background-color: #e6e6e6;
     border-radius: 5px;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     font-weight: 700;
     font-size: xx-large;
-    cursor: pointer;
+    cursor: pointer;;
 }
-
 .wCamRst {
-    grid-column: 3;
+    grid-column: 3/5;
     background-color: #e6e6e6;
     border-radius: 5px;
     display: flex;
@@ -77,10 +79,11 @@ canvas{
     align-items: center;
     font-weight: 700;
     font-size: xx-large;
+    position: relative;
 }
 
 #addImgH {
-    grid-column: 4/6;
+    grid-column: 5/8;
     grid-row: 2/3;
     font-family: 'Merienda', cursive;
     font-family: 'Nanum Pen Script', cursive;
@@ -89,18 +92,18 @@ canvas{
 }
 
 #addImg {
-    grid-column: 4/6;
+    grid-column: 5/8;
     grid-row: 3/6;
 }
 
 #addImgBtn {
-    grid-column: 4/5;
+    grid-column: 5/6;
     background-color: #e6e6e6;
-    border-radius: 5px;
+    border-radius: 40px;
 }
 
 .addImgRst {
-    grid-column: 5/6;
+    grid-column: 6/8;
     background-color: #e6e6e6;
     border-radius: 5px;
     display: flex;
@@ -111,7 +114,7 @@ canvas{
 }
 
 #eChangeH {
-    grid-column: 2/6;
+    grid-column: 2/8;
     background-color: #e6e6e6;
     display: flex;
     justify-content: center;
@@ -121,13 +124,13 @@ canvas{
 }
 
 #eChange {
-    grid-column: 2/6;
+    grid-column: 2/8;
     grid-row: 8/10;
     background-color: #e6e6e6;
 }
 
 #eChangeRst {
-    grid-column: 2/6;
+    grid-column: 2/8;
     background-color: #e6e6e6;
     border-radius: 5px;
     display: flex;
@@ -137,7 +140,6 @@ canvas{
     font-size: xx-large;
 }
 
-#cBtn,
 #iBtn {
     width: 100%;
     height: 100%;
@@ -145,6 +147,12 @@ canvas{
     font-weight: bold;
     font-family: 'Merienda', cursive;
     font-family: 'Nanum Pen Script', cursive;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#iBtn:active{
+    box-shadow: inset 1px 1px 3px 1px rgb(116, 111, 111);
+    border: solid 3px black;
 }
 
 #camPredict,
@@ -160,12 +168,17 @@ canvas{
     display: none;
 }
 #onOff+label{
-    margin-left: 15px;
     width: 50px;
     height: 50px;
     background-repeat: no-repeat;
-    background-image: url('/static/images/stop.png');
-    cursor:pointer;
+    background-image: url(/static/images/stop.png);
+    cursor: pointer;
+    display: block;
+    z-index: 300;
+    position: absolute;
+    right: 2%;
+    top: 52%;
+    transform: translate(0, -50%);
 }
 #onOff:checked+label{
     background-image: url('/static/images/play.png');
@@ -187,15 +200,22 @@ section {
     width: 33.33%;
     padding: 25px 0;
     min-height: 100px;
+    display: flex;
+    align-items: center;
+    z-index: 300;
 }
 
 /*=====================*/
 .checkbox {
     position: relative;
-    transform: translate(100%,10%);
-    display: inline-block;
+    transform: translate(-50%,0);
+    display: flex;
+    left: 50%;
 }
-
+.checkbox>p{
+    position: relative;
+    top: 0;
+}
 .checkbox:after,
 .checkbox:before {
     font-family: FontAwesome;
@@ -212,7 +232,7 @@ section {
 }
 
 .checkbox label {
-    width: 90px;
+    width: 75px;
     height: 30px;
     background: #ccc;
     position: relative;
@@ -253,7 +273,6 @@ section {
 .checkbox input:checked+label:after {
     left: 40px;
 }
-
 .model-13 .checkbox:after {
     content: 'OFF';
     font-family: Arial;
@@ -261,7 +280,7 @@ section {
     position: absolute;
     color: #666;
     top: 12px;
-    right: 15px;
+    right: 7px;
 }
 
 .model-13 .checkbox label {
@@ -281,7 +300,7 @@ section {
     overflow: hidden;
     box-shadow: none;
     border-radius: 14px;
-    transform: translateX(-50px);
+    transform: translateX(-35px);
     -moz-transition: all 0.4s 0.2s, width 0.2s linear, text-indent 0.4s linear;
     -o-transition: all 0.4s 0.2s, width 0.2s linear, text-indent 0.4s linear;
     -webkit-transition: all 0.4s, width 0.2s linear, text-indent 0.4s linear;
@@ -307,7 +326,7 @@ section {
     -webkit-transition: all 0.4s, width 0.2s linear, text-indent 0.3s linear;
     -webkit-transition-delay: 0s, 0.4s, 0.4s;
     transition: all 0.4s, width 0.2s linear 0.4s, text-indent 0.3s linear 0.4s;
-    width: 80px;
+    width: 65px;
     text-indent: 0;
 }
 
@@ -350,7 +369,6 @@ section {
 
 .file-upload-input {
     position: absolute;
-    margin-left: -50%;
     padding: 0;
     width: 100%;
     height: 100%;
@@ -395,10 +413,10 @@ section {
 }
 
 .file-upload-image {
-    max-height: 200px;
-    max-width: 200px;
+    max-height: 170px;
+    max-width: 350px;
     margin: auto;
-    padding: 20px;
+    padding: 5px;
 }
 
 .remove-image {

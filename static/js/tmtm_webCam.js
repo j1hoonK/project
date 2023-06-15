@@ -1,8 +1,9 @@
 // 이미지 모델 불러오기
-const URL = './my_model/';
-const modelURL = URL + 'model.json';
-const metadataURL = URL + 'metadata.json';
+const camURL = './my_model/';
+const modelCamURL = camURL + 'model.json';
+const metadataCamURL = camURL + 'metadata.json';
 
+// WebCam Play / Stop 버튼
 const changDelay = document.getElementById("onOff");
 changDelay.addEventListener("click", function () {
     const is_checked = changDelay.checked;
@@ -16,7 +17,7 @@ changDelay.addEventListener("click", function () {
 // 페이지 진입 시, WebCam 자동실행
 initCam();
 
-let model, webcam, labelContainer, maxPredictions;
+let camModel, webcam, labelContainer, maxPredictions;
 // WebCam 설정
 
 
@@ -25,8 +26,8 @@ async function initCam() {
         const camArea = document.getElementById("webcam-container");
         camArea.replaceChildren();                                              // canvas 삭제
 
-        model = await tmImage.load(modelURL, metadataURL);  // model, metadata 로딩
-        maxPredictions = model.getTotalClasses();           // 클래스의 총 개수 확인
+        camModel = await tmImage.load(modelCamURL, metadataCamURL);  // camModel, metadata 로딩
+        maxPredictions = camModel.getTotalClasses();           // 클래스의 총 개수 확인
 
         // WebCam 세팅
         const flip = true;                                  // 좌우반전
@@ -44,8 +45,8 @@ async function initCam() {
             return
         }
     } else {
-        model = await tmImage.load(modelURL, metadataURL);  // model, metadata 로딩
-        maxPredictions = model.getTotalClasses();           // 클래스의 총 개수 확인
+        camModel = await tmImage.load(modelCamURL, metadataCamURL);  // camModel, metadata 로딩
+        maxPredictions = camModel.getTotalClasses();           // 클래스의 총 개수 확인
 
         // WebCam 세팅
         const flip = true;                                  // 좌우반전
@@ -72,9 +73,9 @@ async function loop() {
     window.requestAnimationFrame(loop);
 }
 
-// run the webcam image through the image model
+// run the webcam image through the image camModel
 async function camPredict() {
-    const prediction = await model.predict(webcam.canvas);
+    const prediction = await camModel.predict(webcam.canvas);
     // 가장 높은 확률 값을 가진 클래스 레이블 찾기
     let highestProbability = 0;
     let highestLabel = '';
@@ -86,7 +87,8 @@ async function camPredict() {
     }
     // 가장 높은 확률 값을 가진 클래스 레이블을 표시
     const labelElement = document.createElement('div');
-    labelElement.textContent = highestLabel + ': ' + highestProbability.toFixed(4) * 100 + '% 입니다.';
+    labelElement.textContent = highestLabel + ' 입니다.';                 // 실제 사용될 항목
+    // labelElement.textContent = highestLabel + ': ' + highestProbability.toFixed(4) * 100 + '% 입니다.';                 // 테스트용 표기 항목
     // 기존의 모든 요소 제거
     while (labelContainer.firstChild) {
         labelContainer.firstChild.remove();
