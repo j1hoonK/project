@@ -129,8 +129,18 @@ canvas{
     background-color: #e6e6e6;
 }
 
-#eChangeRst {
-    grid-column: 2/8;
+#eChangeRstCam {
+    grid-column: 2/5;
+    background-color: #e6e6e6;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: xx-large;
+}
+#eChangeRstImg {
+    grid-column: 5/8;
     background-color: #e6e6e6;
     border-radius: 5px;
     display: flex;

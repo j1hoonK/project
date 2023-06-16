@@ -21,7 +21,7 @@ function readimgURL(input) {
 }
 
 var isUploaded = isImageUploaded();
-console.log(':'+isUploaded);
+//console.log(':'+isUploaded);
 
 function removeUpload() {
     $('.file-upload-input').replaceWith($('.file-upload-input').clone());
@@ -48,9 +48,9 @@ let model, labelCont, maxPredicts;
 // Load the image model and setup the webcam
 async function detectImg() {
     var isUploaded = isImageUploaded();
-    console.log('버튼누르고:'+isUploaded);
+   // console.log('버튼누르고:'+isUploaded);
     if (isUploaded){
-        console.log('이거는true:'+isUploaded);
+        //console.log('이거는true:'+isUploaded);
         const modelimgURL = imgURL + 'model.json';
         const metadataimgURL = imgURL + 'metadata.json';
         
@@ -68,8 +68,8 @@ async function detectImg() {
         }
         Predict();
     }else{
-        console.log('이거는false:'+isUploaded);
-        alert("이미지를 먼저 업로드해주세요");
+        //console.log('이거는false:'+isUploaded);
+        alert("먼저 이미지를 업로드해주세요");
 }}
 
 // run the webcam image through the image model
@@ -96,7 +96,7 @@ async function Predict() {
 
     // 가장 높은 확률 값을 가진 클래스 레이블을 추가
     labelCont.appendChild(labelElement);
-    sendAPIRequest_img()
+    sendAPIRequest_img()                    // 환율 API 호출
 }
 // API 요청을 보내는 함수
 function sendAPIRequest_img() {
@@ -109,7 +109,7 @@ function sendAPIRequest_img() {
             if (request.status === 200) {
                 var response = JSON.parse(request.responseText);
                 // 응답 데이터 처리
-                console.log(response); // 콘솔에 응답 데이터 출력
+                console.log('responseimg:'+response); // 콘솔에 응답 데이터 출력
                 displayExchangeInfo_img(response); // 응답 데이터를 사용하여 환율 정보 표시
             } else {
                 // 에러 처리
@@ -120,13 +120,12 @@ function sendAPIRequest_img() {
 
     request.send();
 }
-// 페이지 로드 시, 자동 호출
-// sendAPIRequest();
 
 // 환율 정보 표시 함수
 function displayExchangeInfo_img(data) {
-    var currency = prompt('환전할 화폐 단위를 입력하세요 (예: USD)');
-    var amount = parseFloat(prompt('환전할 금액을 입력하세요'));
+    var splwCamRst = document.getElementById("imageLabel-container").firstChild.innerText.split('_');
+    var currency = splwCamRst[0]; //prompt('환전할 화폐 단위를 입력하세요 (예: USD)');
+    var amount = splwCamRst[1];
 
     // 환전 계산
     var exchangeRate = 0;
@@ -139,12 +138,12 @@ function displayExchangeInfo_img(data) {
                 var splExchangeRate = exchangeRate.split(',');
                 var newExchangeRate = splExchangeRate[0] + splExchangeRate[1];
                 exchangeRate = newExchangeRate;
-                console.log(newExchangeRate);
-                console.log(splExchangeRate[0]);
-                console.log(splExchangeRate[1]);
+                // console.log(newExchangeRate);
+                // console.log(splExchangeRate[0]);
+                // console.log(splExchangeRate[1]);
             }
-            console.log("i: " + i);
-            console.log("환율: " + exchangeRate);
+            // console.log("i: " + i);
+            // console.log("환율: " + exchangeRate);
             break;
         }
     }
@@ -153,6 +152,15 @@ function displayExchangeInfo_img(data) {
         console.log('해당 화폐 단위의 환율 정보를 찾을 수 없습니다.');
     } else {
         var exchangedAmount = amount * exchangeRate;
+        var labelContainer = document.getElementById("eChangeRstImg");
+        // 기존내용 삭제
+        while (labelContainer.firstChild) {
+            labelContainer.firstChild.remove();
+        }
+        // 환율정보 바탕으로 환전된 금액 출력
+        var exchgLabel = document.createElement('div');
+        exchgLabel.textContent = 'Image: ' + amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + '원 입니다.';
+        labelContainer.appendChild(exchgLabel);
         console.log(amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + ' KRW입니다.');
     }
 }
