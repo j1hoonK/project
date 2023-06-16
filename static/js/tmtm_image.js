@@ -124,7 +124,7 @@ function sendAPIRequest_img() {
 // 환율 정보 표시 함수
 function displayExchangeInfo_img(data) {
     var splwCamRst = document.getElementById("imageLabel-container").firstChild.innerText.split('_');
-    var currency = splwCamRst[0]; //prompt('환전할 화폐 단위를 입력하세요 (예: USD)');
+    var currency = splwCamRst[0];
     var amount = splwCamRst[1];
 
     // 환전 계산
