@@ -42,7 +42,7 @@ $('.image-upload-wrap').bind('dragleave', function () {
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
 
 // the link to your model provided by Teachable Machine export panel
-const imgURL = './my_model/';
+const imgURL = './my_model/EUR/';
 
 let model, labelCont, maxPredicts;
 // Load the image model and setup the webcam
@@ -85,9 +85,15 @@ async function Predict() {
             highestLabel = prediction[i].className;
         }
     }
+
+    imgLabelSplit = highestLabel.split("_");
+    var imgCountry = imgLabelSplit[0];
+    var imgAmount = imgLabelSplit[1];
+    var imgUnit = imgLabelSplit[2];
     // 가장 높은 확률 값을 가진 클래스 레이블을 표시
     const labelElement = document.createElement('div');
-    labelElement.textContent = highestLabel + ' 입니다.';                 // 실제 사용될 항목
+    labelElement.textContent = imgCountry + ' ' + imgAmount + ' ' + imgUnit + '입니다.';                 // 실제 사용될 항목
+    //labelElement.textContent = highestLabel + ' 입니다.';                 // 실제 사용될 항목
     // labelElement.textContent = highestLabel + ': ' + highestProbability.toFixed(4) * 100 + '% 입니다.';                 // 테스트용 표기 항목
     // 기존의 모든 요소 제거
     while (labelCont.firstChild) {
@@ -98,6 +104,9 @@ async function Predict() {
     labelCont.appendChild(labelElement);
     sendAPIRequest_img()                    // 환율 API 호출
 }
+// 국가 코드 정보
+var imgCountryDict = {"Europe" : "EUR"};
+
 // API 요청을 보내는 함수
 function sendAPIRequest_img() {
     var url = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=wrsqbojOCDnORrzFczv3UCnzm9OqChTO&searchdate=20230615&data=AP01';
@@ -123,9 +132,11 @@ function sendAPIRequest_img() {
 
 // 환율 정보 표시 함수
 function displayExchangeInfo_img(data) {
-    var splwCamRst = document.getElementById("imageLabel-container").firstChild.innerText.split('_');
-    var currency = splwCamRst[0];
-    var amount = splwCamRst[1];
+    //var splwImgRst = document.getElementById("imageLabel-container").firstChild.innerText.split('_');
+    //var currency = splwImgRst[0];
+    var currency = imgCountryDict.imgCountry;
+    console.log("currency: " + currency);
+    var amount = imgAmount;
 
     // 환전 계산
     var exchangeRate = 0;
@@ -151,7 +162,7 @@ function displayExchangeInfo_img(data) {
     if (exchangeRate === 0) {
         console.log('해당 화폐 단위의 환율 정보를 찾을 수 없습니다.');
     } else {
-        var exchangedAmount = amount * exchangeRate;
+        var exchangedAmount = imgAmount * exchangeRate;
         var labelContainer = document.getElementById("eChangeRstImg");
         // 기존내용 삭제
         while (labelContainer.firstChild) {
