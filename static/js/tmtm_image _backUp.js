@@ -10,7 +10,7 @@ function readimgURL(input) {
             $('.file-upload-content').show();
             //$('.image-title').html(input.files[0].name);
 
-
+            
         };
 
         reader.readAsDataURL(input.files[0]);
@@ -43,77 +43,55 @@ $('.image-upload-wrap').bind('dragleave', function () {
 
 // the link to your model provided by Teachable Machine export panel
 
-// [x] model / metadata 경로 지정
 const imgURL = './my_model/EUR/';
-const modelImgURL0 = imgURL + 'model.json';
-const metadataImgURL0 = imgURL + 'metadata.json';
-
-const imgURL1 = './my_model/EUR/';
-const modelImgURL1 = imgURL1 + 'model.json';
-const metadataImgURL1 = imgURL1 + 'metadata.json';
-
-const modelImgURL2 = './my_model/KRW/model.json';
-const metadataImgURL2 = './my_model/KRW/metadata.json';
-
-const modelImgURL3 = './my_model/USD/model.json';
-const metadataImgURL3 = './my_model/USD/metadata.json';
-
-// [x] model / metadata 경로 리스트
-imgModelList = [modelImgURL2, modelImgURL3];
-imgMetadataList = [metadataImgURL2, metadataImgURL3];
-
+const modelimgURL = imgURL + 'model.json';
+const metadataimgURL = imgURL + 'metadata.json';
 
 let model, labelCont, maxPredicts;
-let imgMaxlist = {};
-
+// Load the image model and setup the webcam
 async function detectImg() {
     var isUploaded = isImageUploaded();
-    if (isUploaded) {
-        for (let i = 0; i < imgModelList.length; i++) {
-            modelImgURL = imgModelList[i];
-            metadataImgURL = imgMetadataList[i];
-
-            model = await tmImage.load(modelImgURL, metadataImgURL);
-            maxPredicts = model.getTotalClasses();
-
-            // 가장 높은 확률 값을 가진 클래스 레이블 찾기
-            var image = document.getElementById('money-image');
-            const prediction = await model.predict(image, false);
-            let highestProbability = 0;
-            let highestLabel = '';
-            for (let i = 0; i < maxPredicts; i++) {
-                if (prediction[i].probability > highestProbability) {
-                    highestProbability = prediction[i].probability;
-                    highestLabel = prediction[i].className;
-                }
-            }
-            imgMaxlist[highestProbability] = highestLabel;
-        }
-
+    if (isUploaded){
+        
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+        model = await tmImage.load(modelimgURL, metadataimgURL);
+        maxPredicts = model.getTotalClasses();
+        
         labelCont = document.getElementById('imageLabel-container');
         for (let i = 0; i < maxPredicts; i++) {
             // and class labels
             labelCont.appendChild(document.createElement('div'));
         }
         Predict();
-    } else {
+    }else{
+        //console.log('이거는false:'+isUploaded);
         alert("먼저 이미지를 업로드해주세요");
-    }
-}
+}}
 
 // run the webcam image through the image model
 async function Predict() {
-    imgMaxValue = Math.max(...Object.keys(imgMaxlist));
-    imgTopLabel = imgMaxlist[imgMaxValue];
-    imgLabelSplit = imgTopLabel.split("_");
-    console.log("imgTopLabel: ", imgTopLabel);
-
+    var image = document.getElementById('money-image');
+    const prediction = await model.predict(image, false);
+    // 가장 높은 확률 값을 가진 클래스 레이블 찾기
+    let highestProbability = 0;
+    let highestLabel = '';
+    for (let i = 0; i < maxPredicts; i++) {
+        if (prediction[i].probability > highestProbability) {
+            highestProbability = prediction[i].probability;
+            highestLabel = prediction[i].className;
+        }
+    }
+    console.log("highestLabel: ", highestLabel);
+    imgLabelSplit = highestLabel.split("_");
     imgCountry = imgLabelSplit[0];
     imgAmount = imgLabelSplit[1];
-    imgUnit = imgLabelSplit[2];
+    var imgUnit = imgLabelSplit[2];
     // 가장 높은 확률 값을 가진 클래스 레이블을 표시
     const labelElement = document.createElement('div');
-    labelElement.textContent = imgCountry + ': ' + imgAmount + ' ' + imgUnit + '입니다.';                 // 실제 사용될 항목
+    labelElement.textContent = imgCountry + ' ' + imgAmount + ' ' + imgUnit + '입니다.';                 // 실제 사용될 항목
     //labelElement.textContent = highestLabel + ' 입니다.';                 // 실제 사용될 항목
     // labelElement.textContent = highestLabel + ': ' + highestProbability.toFixed(4) * 100 + '% 입니다.';                 // 테스트용 표기 항목
     // 기존의 모든 요소 제거
@@ -126,7 +104,7 @@ async function Predict() {
     sendAPIRequest_img()                    // 환율 API 호출
 }
 // 국가 코드 정보
-var imgCountryDict = { "EUR": "Europe" };
+var imgCountryDict = {"EUR" : "Europe"};
 
 // API 요청을 보내는 함수
 function sendAPIRequest_img() {
@@ -139,11 +117,11 @@ function sendAPIRequest_img() {
             if (request.status === 200) {
                 var response = JSON.parse(request.responseText);
                 // 응답 데이터 처리
-                console.log('==================== [환율정보:] ====================\n', response); // 콘솔에 응답 데이터 출력
+                console.log('responseimg:'+response); // 콘솔에 응답 데이터 출력
                 displayExchangeInfo_img(response); // 응답 데이터를 사용하여 환율 정보 표시
             } else {
                 // 에러 처리
-                console.log('====================[ API 요청 실패:', request.statusText, "] ====================");
+                console.log('API 요청 실패:', request.statusText);
             }
         }
     };
@@ -153,14 +131,11 @@ function sendAPIRequest_img() {
 
 // 환율 정보 표시 함수
 function displayExchangeInfo_img(data) {
-    imgCountry = imgLabelSplit[0];
-    imgAmount = imgLabelSplit[1];
-    imgUnit = imgLabelSplit[2];
-
-    var currency = imgLabelSplit[0];
+    //var splwImgRst = document.getElementById("imageLabel-container").firstChild.innerText.split('_');
+    //var currency = splwImgRst[0];
+    var currency = imgCountryDict[imgCountry];
     console.log("currency: " + currency);
     var amount = imgAmount;
-    console.log("imgAmount: " + imgAmount);
 
     // 환전 계산
     var exchangeRate = 0;
@@ -173,13 +148,18 @@ function displayExchangeInfo_img(data) {
                 var splExchangeRate = exchangeRate.split(',');
                 var newExchangeRate = splExchangeRate[0] + splExchangeRate[1];
                 exchangeRate = newExchangeRate;
+                // console.log(newExchangeRate);
+                // console.log(splExchangeRate[0]);
+                // console.log(splExchangeRate[1]);
             }
+            // console.log("i: " + i);
+            // console.log("환율: " + exchangeRate);
             break;
         }
     }
 
     if (exchangeRate === 0) {
-        console.log('==================== [환율정보 검색 실패] ====================');
+        console.log('해당 화폐 단위의 환율 정보를 찾을 수 없습니다.');
     } else {
         var exchangedAmount = imgAmount * exchangeRate;
         var labelContainer = document.getElementById("eChangeRstImg");
@@ -187,17 +167,11 @@ function displayExchangeInfo_img(data) {
         while (labelContainer.firstChild) {
             labelContainer.firstChild.remove();
         }
-        if (currency !== "KRW") {
-            // 환율정보 바탕으로 환전된 금액 출력
-            var exchgLabel = document.createElement('div');
-            exchgLabel.textContent = 'Image: ' + amount + ' ' + currency + '은(는) 약\n' + exchangedAmount.toFixed(2) + '원 입니다.';
-            labelContainer.appendChild(exchgLabel);
-            console.log(amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + ' KRW입니다.');
-        }else{
-            var exchgLabel = document.createElement('div');
-            exchgLabel.textContent = 'Exchange Rate From Image';
-            labelContainer.appendChild(exchgLabel);
-        }
+        // 환율정보 바탕으로 환전된 금액 출력
+        var exchgLabel = document.createElement('div');
+        exchgLabel.textContent = 'Image: ' + amount + ' ' + currency + '은(는) 약\n' + exchangedAmount.toFixed(2) + '원 입니다.';
+        labelContainer.appendChild(exchgLabel);
+        console.log(amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + ' KRW입니다.');
     }
 }
 
