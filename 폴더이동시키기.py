@@ -12,9 +12,8 @@ import shutil
 import pandas as pd
 
 # CSV 파일 경로 설정
-csv_file = 'euro/train/_annotations.csv'  # CSV 파일 경로
-file_location = 'euro/train'
-
+csv_file = '../imagesForTrain/Euro_test/valid/_annotations.csv'  # CSV 파일 경로
+file_location = '../imagesForTrain/Euro_test/valid'
 # CSV 파일을 데이터프레임으로 읽어오기
 df = pd.read_csv(csv_file)
 
@@ -27,13 +26,13 @@ df.to_csv(csv_file, index=False)
 print("1번")
 # 클래스명과 폴더 경로 매핑 정보 설정
 class_folder_mapping = {
-    'Europe_5_euro': 'imagesForTrain/euro/train/Europe_5_euro',  # 클래스1에 해당하는 폴더 경로
-    'Europe_10_euro': 'imagesForTrain/euro/train/Europe_10_euro',  # 클래스2에 해당하는 폴더 경로
-    'Europe_20_euro': 'imagesForTrain/euro/train/Europe_20_euro',  # 클래스3에 해당하는 폴더 경로
-    'Europe_50_euro': 'imagesForTrain/euro/train/Europe_50_euro',  # 클래스3에 해당하는 폴더 경로
-    'Europe_100_euro': 'imagesForTrain/euro/train/Europe_100_euro',  # 클래스3에 해당하는 폴더 경로
-    'Europe_200_euro': 'imagesForTrain/euro/train/Europe_200_euro',  # 클래스3에 해당하는 폴더 경로
-    'Europe_500_euro': 'imagesForTrain/euro/train/Europe_500_euro',  # 클래스3에 해당하는 폴더 경로
+    '5Euro': '../imagesForTrain/euro/train/Europe_5_euro',  # 클래스1에 해당하는 폴더 경로
+    '10Euro': '../imagesForTrain/euro/train/Europe_10_euro',  # 클래스2에 해당하는 폴더 경로
+    '20Euro': '../imagesForTrain/euro/train/Europe_20_euro',  # 클래스3에 해당하는 폴더 경로
+    '50Euro': '../imagesForTrain/euro/train/Europe_50_euro',  # 클래스3에 해당하는 폴더 경로
+    '100Euro': '../imagesForTrain/euro/train/Europe_100_euro',  # 클래스3에 해당하는 폴더 경로
+    '200Euro': '../imagesForTrain/euro/train/Europe_200_euro',  # 클래스3에 해당하는 폴더 경로
+    '500Euro': '../imagesForTrain/euro/train/Europe_500_euro',  # 클래스3에 해당하는 폴더 경로
     # 추가 클래스와 폴더 경로 매핑
 }
 # 중복 파일 이름 확인을 위한 집합(set) 초기화

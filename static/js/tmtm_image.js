@@ -42,6 +42,7 @@ $('.image-upload-wrap').bind('dragleave', function () {
 // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
 
 // the link to your model provided by Teachable Machine export panel
+
 const imgURL = './my_model/EUR/';
 
 let model, labelCont, maxPredicts;
@@ -85,10 +86,10 @@ async function Predict() {
             highestLabel = prediction[i].className;
         }
     }
-
+    console.log("highestLabel: ", highestLabel);
     imgLabelSplit = highestLabel.split("_");
-    var imgCountry = imgLabelSplit[0];
-    var imgAmount = imgLabelSplit[1];
+    imgCountry = imgLabelSplit[0];
+    imgAmount = imgLabelSplit[1];
     var imgUnit = imgLabelSplit[2];
     // 가장 높은 확률 값을 가진 클래스 레이블을 표시
     const labelElement = document.createElement('div');
@@ -105,7 +106,7 @@ async function Predict() {
     sendAPIRequest_img()                    // 환율 API 호출
 }
 // 국가 코드 정보
-var imgCountryDict = {"Europe" : "EUR"};
+var imgCountryDict = {"EUR" : "Europe"};
 
 // API 요청을 보내는 함수
 function sendAPIRequest_img() {
@@ -134,7 +135,7 @@ function sendAPIRequest_img() {
 function displayExchangeInfo_img(data) {
     //var splwImgRst = document.getElementById("imageLabel-container").firstChild.innerText.split('_');
     //var currency = splwImgRst[0];
-    var currency = imgCountryDict.imgCountry;
+    var currency = imgCountryDict[imgCountry];
     console.log("currency: " + currency);
     var amount = imgAmount;
 
@@ -170,7 +171,7 @@ function displayExchangeInfo_img(data) {
         }
         // 환율정보 바탕으로 환전된 금액 출력
         var exchgLabel = document.createElement('div');
-        exchgLabel.textContent = 'Image: ' + amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + '원 입니다.';
+        exchgLabel.textContent = 'Image: ' + amount + ' ' + currency + '은(는) 약\n' + exchangedAmount.toFixed(2) + '원 입니다.';
         labelContainer.appendChild(exchgLabel);
         console.log(amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + ' KRW입니다.');
     }

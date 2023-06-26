@@ -1,9 +1,26 @@
 import json
 import os
-import tensorflow as tf
-import tensorflowjs as tfjs
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import time
+
+import tensorflow as tf
+from numba import cuda
+# import tensorflowjs as tfjs
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+# GPU 메모리 리셋
+device = cuda.get_current_device()
+device.reset()
+print('GPU Memory reset 완료')
+
+# GPU ON
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+print(os.environ["CUDA_VISIBLE_DEVICES"])
+
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    print("GPU를 사용 중입니다.")
+else:
+    print("GPU를 사용할 수 없습니다.")
 
 # 데이터 폴더 경로 및 클래스명 설정
 data_dir = '../imagesForTrain/euro/train'
@@ -23,7 +40,7 @@ image_size = (224, 224)  # 이미지 크기 조정
 data_generator = datagen.flow_from_directory(
     data_dir,
     target_size=image_size,
-    batch_size=30,
+    batch_size=12,
     class_mode='categorical',
     shuffle=True
 )
@@ -41,10 +58,10 @@ model = tf.keras.Sequential([
 ])
 model.summary()
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-model.fit(data_generator, epochs=60)
+model.fit(data_generator, epochs=50)
 
 # 모델 저장
-model.save('result/euro.h5')
+model.save('result/EUR/euro.h5')
 
 # 메타데이터 생성
 metadata = {
@@ -55,12 +72,6 @@ metadata = {
 # 메타데이터 저장
 with open(metadata_file, 'w') as f:
     json.dump(metadata, f)
-
-# 모델 로드
-model = tf.keras.models.load_model('result/aaa.h5')
-
-# 모델 변환
-tfjs.converters.save_keras_model(model, 'result/model')
-
+    
 end = time.time()
 print("걸린시간: ", end - start, ("s"))

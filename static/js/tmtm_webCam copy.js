@@ -2,9 +2,7 @@
 
 let camModel, webcam, labelContainer, maxPredictions;
 let maxlist = {};
-let isPaused = false; // 일시 정지 상태를 나타내는 변수
-let isWaitingForPlay = false; // play버튼 대기
-let requestId=-1;
+let ppp = false;
 // 이미지 모델 경로
 // const camURL = './my_model/';
 // const modelCamURL = camURL + 'model.json';
@@ -28,55 +26,19 @@ metadataList = [metadataCamURL2, metadataCamURL3];
 // 페이지 진입 시, WebCam 자동실행
 
 initCam();
-requestId = window.requestAnimationFrame(loop); // CHECKLIST: loop()의 위치는 어디로..?
-console.log('requestId:',requestId);
 
 // WebCam Play / Stop 버튼
 const webcamBtn = document.getElementById("onOff");
-webcamBtn.addEventListener("click", function () {
+webcamBtn.addEventListener("click", async function () {
     const is_checked = webcamBtn.checked;
     if (is_checked) {
-        pauseAll(); // 모든 동작 일시 정지 함수 호출
+        webcam.stop();
     } else {
-        resumeAll(); // 모든 동작 다시 시작 함수 호출
+        initCam();
     }
 })
-// 모든 동작 일시 정지 함수
-function pauseAll() {
-    isPaused = true; // 일시 정지 상태로 설정
-    webcam.stop(); // 웹캠 일시 정지
-    //cancelAnimationFrame(loop); // 루프 정지
-    cancelAnimationFrame(requestId); // 루프 정지
-}
 
-// 다시 시작 함수
-async function resumeAll() {
-    if (!isPaused) {
-        return; // 이미 동작 중인 상태이면 함수 종료
-    }
 
-    isWaitingForPlay = true; // play 버튼을 기다리는 상태로 설정
-
-    await waitForPlayButton(); // play 버튼을 기다리는 함수 호출
-
-    isPaused = false; // 일시 정지 상태 해제
-    isWaitingForPlay = false; // play 버튼을 기다리는 상태 해제
-
-    await webcam.setup(); // 웹캠 설정
-    await webcam.play(); // 웹캠 재생
-    loop(); // 루프 다시 시작
-}
-// play 버튼을 기다리는 함수
-async function waitForPlayButton() {
-    return new Promise(function (resolve) {
-        const intervalId = setInterval(function () {
-            if (!isWaitingForPlay) {
-                clearInterval(intervalId);
-                resolve();
-            }
-        }, 100);
-    });
-}
 // WebCam 설정
 async function initCam() {
     console.log('initCam');
@@ -134,17 +96,14 @@ async function initCam() {
     }
 }
 
-
 async function loop() {
     webcam.update();                                // 웹캠 화면 업데이트
     await camPredict();                             // 예측 진행
-    //requestId=window.requestAnimationFrame(loop);
-    //console.log('requestId:',requestId);
+    window.requestAnimationFrame(loop);
 }
 
 // run the webcam image through the image camModel
 async function camPredict() {
-    99999999
     for (let i = 0; i < modelList.length; i++) {    // CHECKLIST: 무엇을 어디부터 어디까지..?
         modelCamURL = modelList[i];
         metadataCamURL = metadataList[i];
@@ -220,7 +179,7 @@ async function camPredict() {
     maxlist = {};
     console.log("list초기화: ", maxlist);
     sendAPIRequest_cam();
-  
+    window.requestAnimationFrame(loop); // CHECKLIST: loop()의 위치는 어디로..?
 }
 // Delay 함수
 function delay(ms) {
@@ -293,5 +252,4 @@ function displayExchangeInfo_cam(data) {
         labelContainer.appendChild(exchgLabel);
         //console.log(amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + ' KRW입니다.');
     }
-    
 }
