@@ -44,13 +44,9 @@ $('.image-upload-wrap').bind('dragleave', function () {
 // the link to your model provided by Teachable Machine export panel
 
 // [x] model / metadata 경로 지정
-const imgURL = './my_model/EUR/';
-const modelImgURL0 = imgURL + 'model.json';
-const metadataImgURL0 = imgURL + 'metadata.json';
 
-const imgURL1 = './my_model/EUR/';
-const modelImgURL1 = imgURL1 + 'model.json';
-const metadataImgURL1 = imgURL1 + 'metadata.json';
+const modelImgURL1 = './result/EUR/model.json';
+const metadataImgURL1 = './result/EUR/metadata.json';
 
 const modelImgURL2 = './my_model/KRW/model.json';
 const metadataImgURL2 = './my_model/KRW/metadata.json';
@@ -59,8 +55,8 @@ const modelImgURL3 = './my_model/USD/model.json';
 const metadataImgURL3 = './my_model/USD/metadata.json';
 
 // [x] model / metadata 경로 리스트
-imgModelList = [modelImgURL2, modelImgURL3];
-imgMetadataList = [metadataImgURL2, metadataImgURL3];
+imgModelList = [modelImgURL1, modelImgURL2, modelImgURL3];
+imgMetadataList = [metadataImgURL1, metadataImgURL2, metadataImgURL3];
 
 
 let model, labelCont, maxPredicts;

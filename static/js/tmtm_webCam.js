@@ -5,9 +5,8 @@ let camMaxlist = {};
 let isPaused = false; // 일시 정지 상태를 나타내는 변수
 
 // [x] model / metadata 경로 지정
-const camURL1 = './my_model/EUR/';
-const modelCamURL1 = camURL1 + 'model.json';
-const metadataCamURL1 = camURL1 + 'metadata.json';
+const modelCamURL1 = './result/EUR/model.json';
+const metadataCamURL1 = './result/EUR/metadata.json';
 
 const modelCamURL2 = './my_model/KRW/model.json';
 const metadataCamURL2 = './my_model/KRW/metadata.json';
@@ -16,8 +15,8 @@ const modelCamURL3 = './my_model/USD/model.json';
 const metadataCamURL3 = './my_model/USD/metadata.json';
 
 // [x] model / metadata 경로 리스트
-modelList = [modelCamURL2, modelCamURL3];
-metadataList = [metadataCamURL2, metadataCamURL3];
+modelList = [modelCamURL1, modelCamURL2, modelCamURL3];
+metadataList = [metadataCamURL1, metadataCamURL2, metadataCamURL3];
 
 // 페이지 진입 시, WebCam 자동실행
 
