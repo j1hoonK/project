@@ -8,11 +8,11 @@
     </style>
     <link rel="stylesheet" href="static/css/tmtm.css" />
     <link rel="shortcut icon" href="#">
+    <title>~ Tell Me the Money ~</title>
 </head>
-
 <body>
 <div id="container">
-    <div id="header"><h1>Tell Me The Money!</h1><img src="./static/images/boomUp2.png"></div>
+    <div id="header"><h1>Tell Me The Money!</h1><img src="./static/images/yaaaho.png"></div>
     <div id="wCamH">
         <h3>WebCam</h3>
             <input type="checkbox" id="onOff"><label for="onOff" id="ply"></label>
@@ -27,7 +27,9 @@
             </div>
         </section>
     </div>
-    <div class="wCamRst" id="camLabel-container"><p id="camPredict">webCamPredictResult</p></div>
+    <div class="wCamRst" id="camLabel-container">
+        <p id="camPredict">webCamPredictResult</p>
+    </div>
     <button id="addImgH", class="file-upload-btn", onclick="$('.file-upload-input').trigger( 'click' )">Add Image</button>
     <div id="addImg">
         <div class="file-upload">
@@ -52,17 +54,19 @@
             </div>
         </div>
     </div>
-    <label id="addImgBtn" for="iBtn"><input type="button" id="iBtn" onclick="detectImg()" value="Predict"></label>
-    <div class="addImgRst" id="imageLabel-container" ><p id="imgPredict">imagePredictResult</p></div>
-    <div id="eChangeH"><h3>이거슨 환율이니</h3></div>
-    <div id="eChange">
+    <label id="addImgBtn" for="iBtn">
+        <input type="button" id="iBtn" onclick="detectImg()" value="Predict">
+    </label>
+    <div class="addImgRst" id="imageLabel-container" >
+        <p id="imgPredict">imagePredictResult</p>
     </div>
     <div id="eChangeRstCam">Exchange Rate From WebCam</div>
     <div id="eChangeRstImg">Exchange Rate From Image</div>
-    
-    
-    
-    
+    <div id="eChange">
+        <iframe src="https://kr.widgets.investing.com/live-currency-cross-rates?theme=lightTheme&hideTitle=true&roundedCorners=true&pairs=9291,9511,158,159,1915,13923,1921,13922,650" width="100%" height="100%" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0"></iframe><div class="poweredBy" style="font-family: Arial, Helvetica, sans-serif;"></div>
+        
+    </div>
+
     <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>

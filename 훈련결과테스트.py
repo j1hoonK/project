@@ -5,11 +5,12 @@ import glob
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 
-test_dir = '..\\imagesForTrain\\euro\\test'
+test_dir = '..\\imagesForTrain\\VND\\test'
 
-label_dict =  {'Europe_100_euro': 0, 'Europe_10_euro': 1, 'Europe_200_euro': 2, 'Europe_20_euro': 3, 'Europe_500_euro': 4, 'Europe_50_euro': 5, 'Europe_5_euro': 6}
-test_image_list = glob.glob(test_dir+'/*.jpg')
+label_dict =  {'100k': 0, '10k': 1, '1k': 2, '200k': 3, '20k': 4, '2k': 5, '500k': 6, '50k': 7, '5k': 8}
+test_image_list = glob.glob(test_dir+'/*/*.jpg')
 random.shuffle(test_image_list)
+print(test_image_list)
 
 test_num = 16
 test_image_files = test_image_list[:test_num]
@@ -17,9 +18,9 @@ test_image_files = test_image_list[:test_num]
 label_list = []
 
 for i in range(len(test_image_files)):
-    label = test_image_files[i].split('\\')[-1].split('_')[0].split('Euro')[0].strip()
-    labeL = f'Europe_{label}_euro'
-    label_list.append(label_dict[labeL])
+    label = test_image_files[i].split('\\')[-2].split('.')[0].strip()
+    #labeL = f'USA_{label}_dollar'
+    label_list.append(label_dict[label])
     
 src_img_list = []
 
@@ -36,12 +37,12 @@ src_img_array = np.array(src_img_list)
 label_array = np.array(label_list)
 
 # 모델 불러오기
-model = load_model('result/EUR/model/230627_01/20-0.99640.h5')
+model = load_model('result/VND/model/19-1.00000.h5')
 
 pred = model.predict(src_img_array)
 print(pred.shape)
 
-class_names = ['Europe_100_euro', 'Europe_10_euro', 'Europe_200_euro', 'Europe_20_euro', 'Europe_500_euro', 'Europe_50_euro', 'Europe_5_euro']
+class_names = ['100k', '10k', '1k', '200k', '20k', '2k', '500k', '50k', '5k']
 plt.figure(figsize=(12,12))
 
 for pos in range(len(pred)):

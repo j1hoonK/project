@@ -9,17 +9,19 @@
     gap: 10px;
     padding: 10px;
 }
-
+img{
+    width: 100px;
+    height: 80px;
+}
 #header {
+    padding-left: 5em;
     margin: auto;
     display: flex;
-    align-items: center;
-    grid-column: 1/9;
+    align-items: flex-start;
+    grid-column: 3/7;
     grid-row: 1/2;
     background-color: #ffffff;
-
 }
-
 #wCamH {
     color: #fff;
     background: #1fadb2;
@@ -125,12 +127,13 @@ canvas{
 
 #eChange {
     grid-column: 2/8;
-    grid-row: 8/10;
+    grid-row: 8/13;
     background-color: #e6e6e6;
 }
 
 #eChangeRstCam {
     grid-column: 2/5;
+    /* grid-row: 12; */
     background-color: #e6e6e6;
     border-radius: 5px;
     display: flex;
@@ -141,6 +144,7 @@ canvas{
 }
 #eChangeRstImg {
     grid-column: 5/8;
+    /* grid-row: 12; */
     background-color: #e6e6e6;
     border-radius: 5px;
     display: flex;
