@@ -5,18 +5,21 @@ let camMaxlist = {};
 let isPaused = false; // 일시 정지 상태를 나타내는 변수
 
 // [x] model / metadata 경로 지정
-const modelCamURL1 = './result/EUR/model.json';
-const metadataCamURL1 = './result/EUR/metadata.json';
+const modelCamURL1 = './my_model/EUR/model.json';
+const metadataCamURL1 = './my_model/EUR/metadata.json';
 
-const modelCamURL2 = './my_model/KRW/model.json';
-const metadataCamURL2 = './my_model/KRW/metadata.json';
+const modelCamURL2 = './my_model/VND/model.json';
+const metadataCamURL2 = './my_model/VND/metadata.json';
 
 const modelCamURL3 = './my_model/USD/model.json';
 const metadataCamURL3 = './my_model/USD/metadata.json';
 
+const modelCamURL4 = './my_model/CNY/model.json';
+const metadataCamURL4 = './my_model/CNY/metadata.json';
+
 // [x] model / metadata 경로 리스트
-modelList = [modelCamURL1, modelCamURL2, modelCamURL3];
-metadataList = [metadataCamURL1, metadataCamURL2, metadataCamURL3];
+modelList = [modelCamURL1, modelCamURL2, modelCamURL3, modelCamURL4];
+metadataList = [metadataCamURL1, metadataCamURL2, metadataCamURL3, metadataCamURL4];
 
 // 페이지 진입 시, WebCam 자동실행
 
@@ -143,7 +146,7 @@ async function camPredict() {
             }
         }
         updateWebcam();                 // delay에 영향 없이 WebCam 구동
-        await delay(4000);              // n 초 대기
+        await delay(1000);              // n 초 대기
         camMaxlist = {};                   // list 초기화
         if (!isPaused) {
             sendAPIRequest_cam();       // Stop버튼 활성화 시, API 호출 안함

@@ -48,15 +48,18 @@ $('.image-upload-wrap').bind('dragleave', function () {
 const modelImgURL1 = './result/EUR/model.json';
 const metadataImgURL1 = './result/EUR/metadata.json';
 
-const modelImgURL2 = './my_model/KRW/model.json';
-const metadataImgURL2 = './my_model/KRW/metadata.json';
+const modelImgURL2 = './my_model/VND/model.json';
+const metadataImgURL2 = './my_model/VND/metadata.json';
 
 const modelImgURL3 = './my_model/USD/model.json';
 const metadataImgURL3 = './my_model/USD/metadata.json';
 
+const modelImgURL4 = './my_model/CNY/model.json';
+const metadataImgURL4 = './my_model/CNY/metadata.json';
+
 // [x] model / metadata 경로 리스트
-imgModelList = [modelImgURL1, modelImgURL2, modelImgURL3];
-imgMetadataList = [metadataImgURL1, metadataImgURL2, metadataImgURL3];
+imgModelList = [modelImgURL1, modelImgURL2, modelImgURL3, modelImgURL4];
+imgMetadataList = [metadataImgURL1, metadataImgURL2, metadataImgURL3, metadataImgURL4];
 
 
 let model, labelCont, maxPredicts;

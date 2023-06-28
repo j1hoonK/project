@@ -18,9 +18,9 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 print(os.environ["CUDA_VISIBLE_DEVICES"])
 
 # 경로
-train_dir = '../imagesForTrain/USD/train'
-val_dir = '../imagesForTrain/USD/train'
-test_dir = '../imagesForTrain/USD/test'
+train_dir = '../imagesForTrain/VND/train'
+val_dir = '../imagesForTrain/VND/train'
+test_dir = '../imagesForTrain/VND/test'
 
 # split
 train_datagen = ImageDataGenerator(rescale=1./255, rotation_range=20, width_shift_range=0.2,
