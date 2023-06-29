@@ -67,8 +67,8 @@ const modelImgURL7 = './my_model/KRW/model.json';
 const metadataImgURL7 = './my_model/KRW/metadata.json';
 
 // [x] model / metadata 경로 리스트
-imgModelList = [modelImgURL1, modelImgURL2, modelImgURL3, modelImgURL4, modelImgURL5, modelImgURL6, modelImgURL7];
-imgMetadataList = [metadataImgURL1, metadataImgURL2, metadataImgURL3, metadataImgURL4, metadataImgURL5, metadataImgURL6, metadataImgURL7];
+imgModelList = [modelImgURL1, modelImgURL2, modelImgURL3, modelImgURL4, modelImgURL5, modelImgURL6];
+imgMetadataList = [metadataImgURL1, metadataImgURL2, metadataImgURL3, metadataImgURL4, metadataImgURL5, metadataImgURL6];
 
 
 let model, labelCont, maxPredicts;

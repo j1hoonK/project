@@ -38,10 +38,8 @@ val_generator = val_datagen.flow_from_directory(val_dir, target_size=(224,224), 
 print('클래스 확인:\n',train_generator.class_indices)
 print(len(train_generator.class_indices),'개')
 
-base_model = MobileNet(weights='imagenet', include_top=False, input_shape=(224,224,3))
-
 model = Sequential()
-model.add(base_model)
+model.add(MobileNet(weights='imagenet', include_top=False, input_shape=(224,224,3)))
 model.add(Flatten())
 model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.25))
