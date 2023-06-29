@@ -3,13 +3,16 @@
 let camModel, webcam, labelContainer, maxPredictions;
 let camMaxlist = {};
 let isPaused = false; // 일시 정지 상태를 나타내는 변수
-
+let cuntryList = {"AED":"아랍에미리트", "AUD":"호주", "BHD":"바레인", "BND":"브루나이", "CAD":"캐나다",
+"CHF":"스위스", "CNH":"중국", "DKK":"덴마크", "EUR":"유럽", "GBP":"영국", "HKD":"홍콩", "IDR":"인도네시아",
+"JPY(100)":"일본", "KRW":"한국", "KWD":"쿠웨이트", "MYR":"말레이시아", "NOK":"노르웨이", "NZD":"뉴지랜드",
+"SAR":"사우디", "SEK":"스웨덴", "SGD":"싱가폴", "THB":"태국", "USD":"미국", "PHP":"필리핀"}
 // [x] model / metadata 경로 지정
 const modelCamURL1 = './my_model/EUR/model.json';
 const metadataCamURL1 = './my_model/EUR/metadata.json';
 
-// const modelCamURL2 = './my_model/VND/model.json';
-// const metadataCamURL2 = './my_model/VND/metadata.json';
+const modelCamURL2 = './my_model/JPY/model.json';
+const metadataCamURL2 = './my_model/JPY/metadata.json';
 
 const modelCamURL3 = './my_model/USD/model.json';
 const metadataCamURL3 = './my_model/USD/metadata.json';
@@ -18,8 +21,8 @@ const modelCamURL4 = './my_model/CNY/model.json';
 const metadataCamURL4 = './my_model/CNY/metadata.json';
 
 // [x] model / metadata 경로 리스트
-modelList = [modelCamURL1, modelCamURL3, modelCamURL4];
-metadataList = [metadataCamURL1, metadataCamURL3, metadataCamURL4];
+modelList = [modelCamURL1, modelCamURL2, modelCamURL3, modelCamURL4];
+metadataList = [metadataCamURL1, metadataCamURL2, metadataCamURL3, metadataCamURL4];
 
 // 페이지 진입 시, WebCam 자동실행
 
@@ -115,7 +118,9 @@ async function camPredict() {
         topLabel = camMaxlist[maxValue];
 
         labelsplit = topLabel.split("_");
-        camResult = labelsplit[0] + ': ' + labelsplit[1] + labelsplit[2] + '입니다.';
+        country = cuntryList[labelsplit[0]];
+        camResult = country + ': ' + labelsplit[1] + labelsplit[2] + '입니다.';
+
         // 가장 높은 확률 값을 가진 클래스 레이블을 표시
         const labelElement = document.createElement('div');
         labelElement.textContent = camResult;                      // 실제 사용될 항목
@@ -191,7 +196,7 @@ function sendAPIRequest_cam() {
 function displayExchangeInfo_cam(data) {
     var currency = labelsplit[0];
     var amount = labelsplit[1];
-
+    var unit = labelsplit[2];
     // 환전 계산
     var exchangeRate = 0;
     for (var i = 0; i < data.length; i++) {
@@ -199,7 +204,9 @@ function displayExchangeInfo_cam(data) {
             exchangeRate = data[i].deal_bas_r;
             if (currency == "KRW") {
                 exchangeRate = 1;
-            } else {
+            }if (currency == "PHP") {
+                exchangeRate = 23.73;
+            }else {
                 if(exchangeRate.indexOf(",") != "-1"){
                     var splExchangeRate = exchangeRate.split(',');
                     var newExchangeRate = splExchangeRate[0] + splExchangeRate[1];
@@ -222,7 +229,7 @@ function displayExchangeInfo_cam(data) {
         if (currency !== "KRW") {
             // 환율정보 바탕으로 환전된 금액 출력
             var exchgLabel = document.createElement('div');
-            exchgLabel.textContent = 'WebCam: ' + amount + ' ' + currency + "은(는) 약 " + exchangedAmount.toFixed(2) + '원 입니다.';
+            exchgLabel.textContent = 'WebCam: ' + amount + ' ' + unit + "은(는) 약 " + exchangedAmount.toFixed(2) + '원 입니다.';
             labelContainer.appendChild(exchgLabel);
         } else {
             var exchgLabel = document.createElement('div');
