@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jun 19 14:52:22 2023
-
-@author: KIBWA_19
-"""
-
 import csv
 import os
 import shutil
@@ -12,8 +5,8 @@ import shutil
 import pandas as pd
 
 # CSV 파일 경로 설정
-csv_file = '../imagesForTrain/TBH/train/_annotations.csv'  # CSV 파일 경로
-file_location = '../imagesForTrain/TBH/train'
+csv_file = "../imagesForTrain/IDR/train/_annotations.csv"  # CSV 파일 경로
+file_location = '../imagesForTrain/IDR/train'
 # CSV 파일을 데이터프레임으로 읽어오기
 df = pd.read_csv(csv_file)
 
@@ -26,17 +19,13 @@ df.to_csv(csv_file, index=False)
 print("1번")
 # 클래스명과 폴더 경로 매핑 정보 설정
 class_folder_mapping = {
-    '1B': '../imagesForTrain/TBH/train/TBH_1_baht',
-    '2B': '../imagesForTrain/TBH/train/TBH_2_baht',
-    '5B': '../imagesForTrain/TBH/train/TBH_5_baht',
-    '10B': '../imagesForTrain/TBH/train/TBH_10_baht',
-    '20B': '../imagesForTrain/TBH/train/TBH_20_baht',
-    '50B': '../imagesForTrain/TBH/train/TBH_50_baht',
-    '100B': '../imagesForTrain/TBH/train/TBH_100_baht',
-    '500B': '../imagesForTrain/TBH/train/TBH_500_baht',
-    '1000B': '../imagesForTrain/TBH/train/TBH_1000_baht',
-    '25S': '../imagesForTrain/TBH/train/TBH_25_Satang',
-    '50S': '../imagesForTrain/TBH/train/TBH_50_Satang',
+    'IND_1000_rupiah': '../imagesForTrain/IDR/train/IND_1000_rupiah',
+    'IND_10000_rupiah': '../imagesForTrain/IDR/train/IND_10000_rupiah',
+    'IND_100000_rupiah': '../imagesForTrain/IDR/train/IND_100000_rupiah',
+    'IND_2000_rupiah': '../imagesForTrain/IDR/train/IND_2000_rupiah',
+    'IND_20000_rupiah': '../imagesForTrain/IDR/train/IND_20000_rupiah',
+    'IND_5000_rupiah': '../imagesForTrain/IDR/train/IND_5000_rupiah',
+    'IND_50000_rupiah': '../imagesForTrain/IDR/train/IND_50000_rupiah',
     
     # 추가 클래스와 폴더 경로 매핑
 }

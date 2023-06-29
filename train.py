@@ -1,12 +1,14 @@
 import os
-from numba import cuda
+
+import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Input, Flatten, Conv2D, MaxPooling2D
+from numba import cuda
 from tensorflow.keras.applications import MobileNet
 from tensorflow.keras.callbacks import EarlyStopping
-import matplotlib.pyplot as plt
+from tensorflow.keras.layers import (Conv2D, Dense, Dropout, Flatten, Input,
+                                     MaxPooling2D)
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # GPU 메모리 리셋
 device = cuda.get_current_device()
@@ -28,9 +30,9 @@ train_datagen = ImageDataGenerator(rescale=1./255, rotation_range=20, width_shif
 val_datagen = ImageDataGenerator(rescale=1./255, validation_split=0.15)
 
 # ImageDataGenerator 정의
-train_generator = train_datagen.flow_from_directory(train_dir, target_size=(224,224), color_mode='rgb', 
+train_generator = train_datagen.flow_from_directory(train_dir, target_size=(224,224), color_mode='rgb',
                                                     class_mode='sparse', batch_size=16, shuffle=True, subset='training')
-val_generator = val_datagen.flow_from_directory(val_dir, target_size=(224,224), color_mode='rgb', 
+val_generator = val_datagen.flow_from_directory(val_dir, target_size=(224,224), color_mode='rgb',
                                                 class_mode='sparse', batch_size=16, shuffle=True, subset='validation')
 
 print('클래스 확인:\n',train_generator.class_indices)
@@ -50,7 +52,7 @@ model.add(Dense(7, activation='softmax'))
 model.compile(optimizer=tf.keras.optimizers.Adam(2e-5), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 modelpath = "result/USD/model/{epoch:02d}-{val_accuracy:.5f}.h5"
-checkpointer = tf.keras.callbacks.ModelCheckpoint(filepath=modelpath, monitor='val_accuracy', verbose=1, save_best_only=True)    
+checkpointer = tf.keras.callbacks.ModelCheckpoint(filepath=modelpath, monitor='val_accuracy', verbose=1, save_best_only=True)
 earlystopping = EarlyStopping(monitor='val_loss', patience=5)
 hist = model.fit(train_generator, validation_data=val_generator,epochs=30, callbacks=[earlystopping, checkpointer])
 

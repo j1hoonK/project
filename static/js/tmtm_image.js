@@ -54,23 +54,31 @@ const metadataImgURL2 = './my_model/VND/metadata.json';
 const modelImgURL3 = './my_model/USD/model.json';
 const metadataImgURL3 = './my_model/USD/metadata.json';
 
-const modelImgURL4 = './my_model/CNY/model.json';
-const metadataImgURL4 = './my_model/CNY/metadata.json';
+const modelImgURL4 = './my_model/CNH/model.json';
+const metadataImgURL4 = './my_model/CNH/metadata.json';
 
 const modelImgURL5 = './my_model/JPY/model.json';
 const metadataImgURL5 = './my_model/JPY/metadata.json';
 
+const modelImgURL6 = './my_model/PHP/model.json';
+const metadataImgURL6 = './my_model/PHP/metadata.json';
+
+const modelImgURL7 = './my_model/KRW/model.json';
+const metadataImgURL7 = './my_model/KRW/metadata.json';
+
 // [x] model / metadata 경로 리스트
-imgModelList = [modelImgURL1, modelImgURL2, modelImgURL3, modelImgURL4, modelImgURL5];
-imgMetadataList = [metadataImgURL1, metadataImgURL2, metadataImgURL3, metadataImgURL4, metadataImgURL5];
+imgModelList = [modelImgURL1, modelImgURL2, modelImgURL3, modelImgURL4, modelImgURL5, modelImgURL6, modelImgURL7];
+imgMetadataList = [metadataImgURL1, metadataImgURL2, metadataImgURL3, metadataImgURL4, metadataImgURL5, metadataImgURL6, metadataImgURL7];
 
 
 let model, labelCont, maxPredicts;
 let imgMaxlist = {};
-let cuntryListDic = {"AED":"아랍에미리트", "AUD":"호주", "BHD":"바레인", "BND":"브루나이", "CAD":"캐나다",
-"CHF":"스위스", "CNH":"중국", "DKK":"덴마크", "EUR":"유럽", "GBP":"영국", "HKD":"홍콩", "IDR":"인도네시아",
-"JPY(100)":"일본", "KRW":"한국", "KWD":"쿠웨이트", "MYR":"말레이시아", "NOK":"노르웨이", "NZD":"뉴지랜드",
-"SAR":"사우디", "SEK":"스웨덴", "SGD":"싱가폴", "THB":"태국", "USD":"미국"}
+let cuntryListDic = {
+    "AED": "아랍에미리트", "AUD": "호주", "BHD": "바레인", "BND": "브루나이", "CAD": "캐나다",
+    "CHF": "스위스", "CNH": "중국", "DKK": "덴마크", "EUR": "유럽", "GBP": "영국", "HKD": "홍콩", "IDR": "인도네시아",
+    "JPY(100)": "일본", "KRW": "한국", "KWD": "쿠웨이트", "MYR": "말레이시아", "NOK": "노르웨이", "NZD": "뉴지랜드",
+    "SAR": "사우디", "SEK": "스웨덴", "SGD": "싱가폴", "THB": "태국", "USD": "미국", "PHP": "필리핀"
+}
 
 async function detectImg() {
     var isUploaded = isImageUploaded();
@@ -109,9 +117,10 @@ async function detectImg() {
 
 // run the webcam image through the image model
 async function Predict() {
+    console.log("==================== [Predict] ====================");
     imgMaxValue = Math.max(...Object.keys(imgMaxlist));
     imgTopLabel = imgMaxlist[imgMaxValue];
-    
+
     imgLabelSplit = imgTopLabel.split("_");
 
     imgCountry = cuntryListDic[imgLabelSplit[0]];
@@ -160,13 +169,15 @@ function displayExchangeInfo_img(data) {
     var unit = imgLabelSplit[2];
     // 환전 계산
     var exchangeRate = 0;
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].cur_unit === currency) {
-            exchangeRate = data[i].deal_bas_r;
-            if (currency == "KRW") {
-                exchangeRate = 1;
-            } else {
-                if(exchangeRate.indexOf(",") != "-1"){
+    if (currency == "KRW") {
+        exchangeRate = 1;
+    } if (currency == "PHP") {
+        exchangeRate = 23.73;
+    } else {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].cur_unit === currency) {
+                exchangeRate = data[i].deal_bas_r;
+                if (exchangeRate.indexOf(",") != "-1") {
                     var splExchangeRate = exchangeRate.split(',');
                     var newExchangeRate = splExchangeRate[0] + splExchangeRate[1];
                     exchangeRate = newExchangeRate;
@@ -177,6 +188,7 @@ function displayExchangeInfo_img(data) {
     }
 
     if (exchangeRate === 0) {
+        console.log("currency:", currency);
         console.log('==================== [환율정보 검색 실패] ====================');
     } else {
         var exchangedAmount = amount * exchangeRate;
@@ -190,7 +202,7 @@ function displayExchangeInfo_img(data) {
             var exchgLabel = document.createElement('div');
             exchgLabel.textContent = 'Image: ' + amount + ' ' + unit + '은(는) 약\n' + exchangedAmount.toFixed(2) + '원 입니다.';
             labelContainer.appendChild(exchgLabel);
-        }else{
+        } else {
             var exchgLabel = document.createElement('div');
             exchgLabel.textContent = 'Exchange Rate From Image';
             labelContainer.appendChild(exchgLabel);
