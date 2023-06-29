@@ -8,8 +8,8 @@ let isPaused = false; // 일시 정지 상태를 나타내는 변수
 const modelCamURL1 = './my_model/EUR/model.json';
 const metadataCamURL1 = './my_model/EUR/metadata.json';
 
-const modelCamURL2 = './my_model/VND/model.json';
-const metadataCamURL2 = './my_model/VND/metadata.json';
+// const modelCamURL2 = './my_model/VND/model.json';
+// const metadataCamURL2 = './my_model/VND/metadata.json';
 
 const modelCamURL3 = './my_model/USD/model.json';
 const metadataCamURL3 = './my_model/USD/metadata.json';
@@ -18,8 +18,8 @@ const modelCamURL4 = './my_model/CNY/model.json';
 const metadataCamURL4 = './my_model/CNY/metadata.json';
 
 // [x] model / metadata 경로 리스트
-modelList = [modelCamURL1, modelCamURL2, modelCamURL3, modelCamURL4];
-metadataList = [metadataCamURL1, metadataCamURL2, metadataCamURL3, metadataCamURL4];
+modelList = [modelCamURL1, modelCamURL3, modelCamURL4];
+metadataList = [metadataCamURL1, metadataCamURL3, metadataCamURL4];
 
 // 페이지 진입 시, WebCam 자동실행
 
@@ -200,9 +200,11 @@ function displayExchangeInfo_cam(data) {
             if (currency == "KRW") {
                 exchangeRate = 1;
             } else {
-                var splExchangeRate = exchangeRate.split(',');
-                var newExchangeRate = splExchangeRate[0] + splExchangeRate[1];
-                exchangeRate = newExchangeRate;
+                if(exchangeRate.indexOf(",") != "-1"){
+                    var splExchangeRate = exchangeRate.split(',');
+                    var newExchangeRate = splExchangeRate[0] + splExchangeRate[1];
+                    exchangeRate = newExchangeRate;
+                }
             }
             break;
         }

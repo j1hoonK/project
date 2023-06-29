@@ -45,8 +45,8 @@ $('.image-upload-wrap').bind('dragleave', function () {
 
 // [x] model / metadata 경로 지정
 
-const modelImgURL1 = './result/EUR/model.json';
-const metadataImgURL1 = './result/EUR/metadata.json';
+const modelImgURL1 = './my_model/EUR/model.json';
+const metadataImgURL1 = './my_model/EUR/metadata.json';
 
 const modelImgURL2 = './my_model/VND/model.json';
 const metadataImgURL2 = './my_model/VND/metadata.json';
@@ -152,14 +152,11 @@ function sendAPIRequest_img() {
 
 // 환율 정보 표시 함수
 function displayExchangeInfo_img(data) {
-    imgCountry = imgLabelSplit[0];
-    imgAmount = imgLabelSplit[1];
-    imgUnit = imgLabelSplit[2];
+    // imgCountry = imgLabelSplit[0];
+    // imgAmount = imgLabelSplit[1];
 
     var currency = imgLabelSplit[0];
-    console.log("currency: " + currency);
-    var amount = imgAmount;
-    console.log("imgAmount: " + imgAmount);
+    var amount = imgLabelSplit[1];
 
     // 환전 계산
     var exchangeRate = 0;
@@ -169,9 +166,11 @@ function displayExchangeInfo_img(data) {
             if (currency == "KRW") {
                 exchangeRate = 1;
             } else {
-                var splExchangeRate = exchangeRate.split(',');
-                var newExchangeRate = splExchangeRate[0] + splExchangeRate[1];
-                exchangeRate = newExchangeRate;
+                if(exchangeRate.indexOf(",") != "-1"){
+                    var splExchangeRate = exchangeRate.split(',');
+                    var newExchangeRate = splExchangeRate[0] + splExchangeRate[1];
+                    exchangeRate = newExchangeRate;
+                }
             }
             break;
         }
@@ -180,7 +179,7 @@ function displayExchangeInfo_img(data) {
     if (exchangeRate === 0) {
         console.log('==================== [환율정보 검색 실패] ====================');
     } else {
-        var exchangedAmount = imgAmount * exchangeRate;
+        var exchangedAmount = amount * exchangeRate;
         var labelContainer = document.getElementById("eChangeRstImg");
         // 기존내용 삭제
         while (labelContainer.firstChild) {
@@ -191,7 +190,6 @@ function displayExchangeInfo_img(data) {
             var exchgLabel = document.createElement('div');
             exchgLabel.textContent = 'Image: ' + amount + ' ' + currency + '은(는) 약\n' + exchangedAmount.toFixed(2) + '원 입니다.';
             labelContainer.appendChild(exchgLabel);
-            console.log(amount + ' ' + currency + '은(는) 약 ' + exchangedAmount.toFixed(2) + ' KRW입니다.');
         }else{
             var exchgLabel = document.createElement('div');
             exchgLabel.textContent = 'Exchange Rate From Image';
